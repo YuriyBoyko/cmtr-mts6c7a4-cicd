@@ -1,7 +1,9 @@
 #!/bin/bash
 
-echo "Stopping Flask application..."
+set -e
 
-systemctl stop mts6c7a4-app.service || true
+echo "Stopping application..."
+
+pkill -f "gunicorn.*app:app" || true
 
 echo "Application stopped."

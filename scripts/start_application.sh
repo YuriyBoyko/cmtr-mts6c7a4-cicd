@@ -1,28 +1,22 @@
 #!/bin/bash
+
 set -e
 
-APP_DIR="/opt/mts6c7a4-app"
+APP_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 
-echo "Creating systemd service..."
+echo "Starting application from: $APP_DIR"
 
-cat > /etc/systemd/system/mts6c7a4-app.service <<EOF
-[Unit]
-Description=MTS6C7A4 Flask Application
-After=network.target
+cd "$APP_DIR"
 
-[Service]
-User=root
-WorkingDirectory=$APP_DIR
-ExecStart=$APP_DIR/venv/bin/gunicorn --bind 0.0.0.0:5000 --workers 2 app:app
-Restart=always
-RestartSec=5
+# Stop an existing Gunicorn process if it exists
+pkill -f "gunicorn.*app:app" || true
 
-[Install]
-WantedBy=multi-user.target
-EOF
+echo "Starting Gunicorn..."
 
-systemctl daemon-reload
-systemctl enable mts6c7a4-app.service
-systemctl restart mts6c7a4-app.service
+nohup python3 -m gunicorn \
+    --bind 0.0.0.0:5000 \
+    --workers 2 \
+    app:app \
+    > /var/log/cmtr-mts6c7a4.log 2>&1 &
 
-echo "Application started successfully."
+echo "Application started."
