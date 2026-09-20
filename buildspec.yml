@@ -1,0 +1,26 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.12
+
+  pre_build:
+    commands:
+      - echo Installing dependencies...
+      - python -m pip install --upgrade pip
+      - pip install -r requirements.txt
+
+  build:
+    commands:
+      - echo Build started on `date`
+      - python -m py_compile app.py
+
+  post_build:
+    commands:
+      - echo Build completed on `date`
+
+artifacts:
+  files:
+    - '**/*'
+  discard-paths: no
