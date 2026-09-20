@@ -14,7 +14,7 @@ pkill -f "gunicorn.*app:app" || true
 echo "Starting Gunicorn..."
 
 nohup python3 -m gunicorn \
-    --bind 0.0.0.0:5000 \
+    --bind 0.0.0.0:8000 \
     --workers 2 \
     app:app \
     > /var/log/cmtr-mts6c7a4.log 2>&1 &

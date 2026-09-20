@@ -5,7 +5,7 @@ set -e
 echo "Checking application health..."
 
 for i in {1..12}; do
-    if curl -fs http://127.0.0.1:5000/ > /dev/null; then
+    if curl -fs http://127.0.0.1:8000/ > /dev/null; then
         echo "Application is healthy."
         exit 0
     fi
